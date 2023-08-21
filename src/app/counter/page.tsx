@@ -12,10 +12,7 @@ export default function Home() {
       <div style={{ marginBottom: "4rem", textAlign: "center" }}>
         <h4 style={{ marginBottom: 16 }}>{count}</h4>
         <button onClick={() => dispatch(increment())}>increment</button>
-        <button
-          onClick={() => dispatch(decrement())}
-          style={{ marginInline: 16 }}
-        >
+        <button onClick={() => dispatch(decrement())} style={{ marginInline: 16 }}>
           decrement
         </button>
         <button onClick={() => dispatch(reset())}>reset</button>

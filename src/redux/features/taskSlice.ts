@@ -1,39 +1,43 @@
-import { TaskListState, Task } from "@/types/types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
+type Task = {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+  created_at: number;
+  expires_on: number;
+};
 
-const initialState = {
-tasks: []
-} as TaskListState;
-
-export const task = createSlice({
-  name: "task",
-  initialState,
+export const taskSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: [],
+  },
   reducers: {
-    reset: () => initialState, //BORRA TODAS LAS TAREAS
-    add_task: (state, action: PayloadAction<Task>) => {
-    //   state.value += 1;//AGREGA TAREA
+    setInitialState: (state, action) => {
+      state.value = action.payload;
     },
-    update_task: (state, action: PayloadAction<Task>) => {
-    //   state.value += 1;//ACTUALIZA TAREA
+    addTask: (state) => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the Immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.value.push();
     },
-    delete_task: (state, action: PayloadAction<Task>) => {
-    //   state.value += 1;//ELIMINA TAREA
-    },
-  
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
+    // decrement: (state) => {
+    //   state.value -= 1;
+    // },
+    // incrementByAmount: (state, action) => {
     //   state.value += action.payload;
     // },
-    // decrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value -= action.payload;
+    // reset: (state) => {
+    //   state.value = 0;
     // },
   },
 });
 
-export const {
-  reset,
-  add_task,
-  update_task,
-  delete_task,
-} = task.actions;
-export default task.reducer;
+// Action creators are generated for each case reducer function
+export const { setInitialState, addTask } = taskSlice.actions;
+
+export default taskSlice.reducer;
