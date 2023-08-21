@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import React from "react";
 
 const page = () => {
-  const dispatch = useAppDispatch;
+  // const dispatch = useAppDispatch;
   return (
     <div className="md:mx-32 mx-4">
       <h3>Crear nueva Tarea</h3>
@@ -15,22 +15,7 @@ const page = () => {
           <input type="date" name="" id="" />
         </div>
 
-        <button
-          className="border rounded p-1"
-          onClick={
-            () => dispatch()
-            // addTask({
-            //   userId: 1,
-            //   id: 10,
-            //   title: "test",
-            //   completed: false,
-            //   create_at: 123123,
-            //   expires_on: 123123,
-            // })
-          }
-        >
-          Crear
-        </button>
+        <button className="border rounded p-1">Crear</button>
       </form>
     </div>
   );

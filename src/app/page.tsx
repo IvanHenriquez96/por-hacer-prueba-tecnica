@@ -1,5 +1,4 @@
 import TaskList from "@/components/TaskList";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 async function getTasks() {
   const res = await fetch("http://45.236.128.210:4000/todos");
