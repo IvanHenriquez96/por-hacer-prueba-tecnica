@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <main className="md:mx-32 mx-4">
       <div className="flex justify-between justify-items-center my-5">
-        <h2 className="md:text-3xl text-xl">Cosas por Hacer</h2>
+        <h2 className="md:text-3xl text-xl font-semibold">Cosas por Hacer</h2>
         <h3 className="my-auto">Hoy: {`${day}/${month}/${year}`}</h3>
       </div>
 
