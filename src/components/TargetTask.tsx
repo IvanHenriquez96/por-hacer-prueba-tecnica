@@ -16,11 +16,15 @@ const TargetTask = ({ task }: any) => {
   }, []);
 
   return (
-    <div className={`my-5 border rounded p-2 ${task.completed && "bg-green-300"}`}>
+    <div
+      className={`my-5 border rounded p-2 ${task.completed && "bg-green-300"}`}
+    >
       <div className="flex justify-between">
         <div className="flex">
           <input type="checkbox" name="" />
-          <p className={`ml-2 my-auto ${task.completed && "text-white"}`}>{task.title}</p>
+          <p className={`ml-2 my-auto ${task.completed && "text-white"}`}>
+            {task.title}
+          </p>
         </div>
 
         <div className="flex">

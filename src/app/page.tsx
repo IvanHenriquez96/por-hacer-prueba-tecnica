@@ -1,7 +1,9 @@
 import TaskList from "@/components/TaskList";
 
 async function getTasks() {
-  const res = await fetch("http://45.236.128.210:4000/todos");
+  const res = await fetch("http://45.236.128.210:4000/todos", {
+    cache: "no-store", // I also tried "no-cache",
+  });
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch data");

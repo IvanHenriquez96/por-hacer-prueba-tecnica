@@ -1,16 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+ import { Task,TaskList } from "../../types/types";
+//  import { fetchTask } from './taskAPI';
 
-type Task = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-  created_at: number;
-  expires_on: number;
-};
+
 
 export const taskSlice = createSlice({
-  name: "counter",
+  name: "task",
   initialState: {
     value: [],
   },
@@ -18,12 +13,14 @@ export const taskSlice = createSlice({
     setInitialState: (state, action) => {
       state.value = action.payload;
     },
-    addTask: (state) => {
+    addTask: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.value.push();
+
+      
+      // state.value = [ ...state.value, action.payload]
     },
     // decrement: (state) => {
     //   state.value -= 1;

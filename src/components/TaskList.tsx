@@ -3,6 +3,7 @@ import { setInitialState, addTask } from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect, useState } from "react";
 import TargetTask from "./TargetTask";
+import Link from "next/link";
 
 interface Props {
   tasks: any;
@@ -16,20 +17,11 @@ const TaskList: React.FC<Props> = ({ tasks }) => {
   useEffect(() => {
     console.log("se imprime la lista");
     //se setean como initialState todas las tareas
-    dispatch(setInitialState(tasks));
+    // dispatch(setInitialState(tasks));
   }, []);
-
-  // const tasks = useAppSelector((state) => state.taskReducer.value);
-  // const dispatch = useAppDispatch();
-
-  // console.log("clggg", tasks);
 
   return (
     <div className="border rounded p-2">
-      {/* {tasks.length <= 0 && <p>No hay tareas por hacer!</p>} */}
-
-      {/* <p>LiSTA DE COSAS POR HACER</p> */}
-
       <div className="flex justify-between">
         <div className="flex border-red-700  bg-red-400 p-2 rounded text-white">
           <button className="">Liberar Seleccionadas</button>
@@ -63,11 +55,15 @@ const TaskList: React.FC<Props> = ({ tasks }) => {
         </svg>
       </div>
 
-      {tasksState.map((task: { id: number; title: string }) => {
-        return <TargetTask key={task.id} task={task} />;
+      {tasksState.map((task: any, index) => {
+        return <TargetTask key={index} task={task} />;
       })}
 
-      <div className="my-5 border rounded p-2 text-center text-3xl font-extrabold">+</div>
+      <Link href={"/createTask"}>
+        <div className="my-5 border rounded p-2 text-center text-3xl font-extrabold">
+          +
+        </div>
+      </Link>
     </div>
   );
 };

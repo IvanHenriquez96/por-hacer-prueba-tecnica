@@ -1,6 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, applyMiddleware  } from "@reduxjs/toolkit";
 import counterReducer from "../redux/features/counterSlice";
 import taskReducer from "../redux/features/taskSlice";
+
 
 export const store = configureStore({
   reducer: {

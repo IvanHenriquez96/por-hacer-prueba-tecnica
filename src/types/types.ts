@@ -1,10 +1,11 @@
 export type Task = {
   id: number;
   title: string;
-  limit_time: string;
-  isComplete: boolean;
+  completed: boolean;
+  create_at: string;
+  expires_on: string;
 };
 
-export type TaskListState = {
+export type TaskList = {
   tasks: Task[];
 };
