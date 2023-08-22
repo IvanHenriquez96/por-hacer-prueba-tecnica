@@ -2,7 +2,8 @@ import TaskList from "@/components/TaskList";
 
 async function getTasks() {
   const res = await fetch("http://45.236.128.210:4000/todos", {
-    cache: "no-store", // I also tried "no-cache",
+    cache: "no-store",
+    mode: "no-cors",
   });
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
