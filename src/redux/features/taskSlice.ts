@@ -7,7 +7,10 @@ const initialState: TaskList = {
 
 //Funciones Thunks
 export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
-  const res = await fetch("http://45.236.128.210:4000/todos");
+  const res = await fetch("http://45.236.128.210:4000/todos", {
+    cache: "no-store",
+    mode: "no-cors",
+  });
   const data = await res.json();
   return data;
 });
