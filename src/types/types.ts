@@ -1,7 +1,7 @@
 export type Task = {
   id?: number;
   title: string;
-  completed: boolean;
+  estado: string;
   create_at: string;
   expires_on: string;
 };

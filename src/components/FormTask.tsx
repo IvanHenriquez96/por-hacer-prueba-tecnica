@@ -11,7 +11,7 @@ const FormTask = () => {
 
   const [form, setForm] = useState({
     title: "",
-    completed: false,
+    estado: "pendiente",
     create_at: "",
     expires_on: "",
   });

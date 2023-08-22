@@ -1,19 +1,19 @@
 import TaskList from "@/components/TaskList";
 
-async function getTasks() {
-  const res = await fetch("http://45.236.128.210:4000/todos", {
-    cache: "no-store",
-    mode: "no-cors",
-  });
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-}
+// async function getTasks() {
+//   const res = await fetch("http://45.236.128.210:4000/todos", {
+//     cache: "no-store",
+//     mode: "no-cors",
+//   });
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     throw new Error("Failed to fetch data");
+//   }
+//   return res.json();
+// }
 
 export default async function Home() {
-  const tasks = await getTasks();
+  // const tasks = await getTasks();
 
   //Obtiene fecha actual
   let actual_date = new Date();
@@ -28,7 +28,7 @@ export default async function Home() {
         <h3 className="my-auto">Hoy: {`${day}/${month}/${year}`}</h3>
       </div>
 
-      <TaskList tasks={tasks} />
+      <TaskList />
     </main>
   );
 }

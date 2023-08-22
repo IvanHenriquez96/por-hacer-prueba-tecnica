@@ -4,21 +4,21 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect, useState } from "react";
 import TargetTask from "./TargetTask";
 import Link from "next/link";
-import { TaskList } from "@/types/types";
+// import { TaskList } from "@/types/types";
 
 // interface Props {
 //   tasks: any;
 // }
 
-const TaskList: React.FC<TaskList> = ({ tasks }) => {
+const TaskList = () => {
   const dispatch = useAppDispatch();
   const tasksState = useAppSelector((state) => state.taskReducer.tasks);
-  console.log(tasks, tasksState);
 
   useEffect(() => {
     console.log("se imprime la lista");
     //se setean como initialState todas las tareas
     dispatch(fetchTasks());
+    // console.log(tasksState);
   }, []);
 
   return (
