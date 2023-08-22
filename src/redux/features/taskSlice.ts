@@ -30,12 +30,12 @@ export const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    // setInitialState: (state, action) => {
-    //   state.tasks = action.payload;
-    // },
-    // addTask: (state, action: PayloadAction<Task>) => {
-    //   // state.tasks = [...state.tasks, action.payload];
-    // },
+    setInitialState: (state, action) => {
+      state.tasks = action.payload;
+    },
+    addTask: (state, action: PayloadAction<Task>) => {
+      state.tasks = [...state.tasks, action.payload];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
