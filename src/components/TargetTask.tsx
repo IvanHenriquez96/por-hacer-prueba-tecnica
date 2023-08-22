@@ -6,27 +6,17 @@ const TargetTask = ({ task }: any) => {
   const [expires_on, setExpires_on] = useState("");
 
   useEffect(() => {
-    // console.log("testtt", tasksState);
-    // let date = new Date(0); // The 0 there is the key, which sets the date to the epoch
-    // date.setUTCSeconds(task.create_at);
-    // const year = date.getFullYear();
-    // const month = String(date.getMonth() + 1).padStart(2, "0"); // Los meses son base 0
-    // const day = String(date.getDate()).padStart(2, "0");
-    // const creado_el = `${year}-${month}-${day}`;
-    // setCreate_at(creado_el);
-
-    // date.setUTCSeconds(task.expires_on);
-    // const year2 = date.getFullYear();
-    // const month2 = String(date.getMonth() + 1).padStart(2, "0"); // Los meses son base 0
-    // const day2 = String(date.getDate()).padStart(2, "0");
-    // const expira_el = `${year2}-${month2}-${day2}`;
-    // setExpires_on(expira_el);
-
     const expires_on_aux = new Date(tasksState.expires_on);
-    const expires_on = expires_on_aux.toISOString().split("T")[0];
+    setTasksState({
+      ...tasksState,
+      expires_on: expires_on_aux.toISOString().split("T")[0],
+    });
   }, []);
 
-  const handleChange = () => {};
+  const handleChange = (e: any) => {
+    console.log("cambia fecha");
+    setTasksState({ ...tasksState, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
@@ -38,7 +28,7 @@ const TargetTask = ({ task }: any) => {
             className="border"
             type="date"
             name="expires_on"
-            value={expires_on}
+            value={tasksState.expires_on}
             onChange={handleChange}
           />
         </div>
