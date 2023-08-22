@@ -1,23 +1,24 @@
 "use client";
-import { setInitialState, addTask } from "@/redux/features/taskSlice";
+import { setInitialState, addTask, fetchTasks } from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect, useState } from "react";
 import TargetTask from "./TargetTask";
 import Link from "next/link";
+import { TaskList } from "@/types/types";
 
-interface Props {
-  tasks: any;
-}
+// interface Props {
+//   tasks: any;
+// }
 
-const TaskList: React.FC<Props> = ({ tasks }) => {
+const TaskList: React.FC<TaskList> = ({ tasks }) => {
   const dispatch = useAppDispatch();
-  const tasksState = useAppSelector((state) => state.taskReducer.value);
+  const tasksState = useAppSelector((state) => state.taskReducer.tasks);
   console.log(tasks, tasksState);
 
   useEffect(() => {
     console.log("se imprime la lista");
     //se setean como initialState todas las tareas
-    // dispatch(setInitialState(tasks));
+    dispatch(fetchTasks());
   }, []);
 
   return (

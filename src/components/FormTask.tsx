@@ -1,5 +1,5 @@
 "use client";
-import { addTask } from "@/redux/features/taskSlice";
+import { addTask, saveTasks } from "@/redux/features/taskSlice";
 import { useAppDispatch } from "../redux/hooks";
 
 import { useState } from "react";
@@ -29,7 +29,7 @@ const FormTask = () => {
     const aux = { ...form, create_at: hora_actual.toString() };
     setForm(aux);
 
-    dispatch(addTask(form));
+    dispatch(saveTasks(form));
     router.push("/");
   };
 
@@ -39,21 +39,11 @@ const FormTask = () => {
     <form className="border p-2 rounded" onSubmit={handleSubmit}>
       <div>
         <label htmlFor="">Título:</label>
-        <input
-          className="border"
-          type="text"
-          name="title"
-          onChange={handleChange}
-        />
+        <input className="border" type="text" name="title" onChange={handleChange} />
       </div>
       <div>
         <label htmlFor="">Expira el:</label>
-        <input
-          className="border"
-          type="date"
-          name="expires_on"
-          onChange={handleChange}
-        />
+        <input className="border" type="date" name="expires_on" onChange={handleChange} />
       </div>
 
       <button className="border rounded p-1">Crear</button>
