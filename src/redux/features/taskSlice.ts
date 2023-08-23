@@ -7,7 +7,7 @@ const initialState: TaskList = {
 
 //Funciones Thunks
 export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
-  const res = await fetch("http://45.236.128.210:4000/todos", {
+  const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
     cache: "no-store",
   });
   const data = await res.json();
@@ -15,7 +15,7 @@ export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
 });
 
 export const saveTasks = createAsyncThunk("tasks/save", async (task: Task, thunkAPI) => {
-  const res = await fetch("http://45.236.128.210:4000/todos", {
+  const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,13 +29,16 @@ export const saveTasks = createAsyncThunk("tasks/save", async (task: Task, thunk
 export const updateTasks = createAsyncThunk(
   "tasks/update",
   async (task: Task, thunkAPI) => {
-    const res = await fetch(`http://45.236.128.210:4000/todos/${task.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    });
+    const res = await fetch(
+      `https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      }
+    );
     const data = await res.json();
     return data;
   }
@@ -44,13 +47,16 @@ export const updateTasks = createAsyncThunk(
 export const deleteTasks = createAsyncThunk(
   "tasks/delete",
   async (task: Task, thunkAPI) => {
-    const res = await fetch(`http://45.236.128.210:4000/todos/${task.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    });
+    const res = await fetch(
+      `https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      }
+    );
     const data = await res.json();
     return data;
   }
