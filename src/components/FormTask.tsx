@@ -2,7 +2,7 @@
 import { addTask, saveTasks } from "@/redux/features/taskSlice";
 import { useAppDispatch } from "../redux/hooks";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const FormTask = () => {
@@ -17,6 +17,11 @@ const FormTask = () => {
     checked: false,
   });
 
+  useEffect(() => {
+    const fecha = getFechaActual();
+    setForm({ ...form, create_at: fecha, expires_on: fecha });
+  }, []);
+
   const handleChange = (e: any) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -26,19 +31,20 @@ const FormTask = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Obtener la fecha y hora actual
-    const now = new Date();
+    // // Obtener la fecha y hora actual
+    // const now = new Date();
 
-    // Obtener los componentes de la fecha y hora
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
+    // // Obtener los componentes de la fecha y hora
+    // const year = now.getFullYear();
+    // const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
+    // const day = String(now.getDate()).padStart(2, "0");
+    // const hours = String(now.getHours()).padStart(2, "0");
+    // const minutes = String(now.getMinutes()).padStart(2, "0");
+    // const seconds = String(now.getSeconds()).padStart(2, "0");
 
-    // Formatear en el formato deseado
-    const hora_actual = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    // // Formatear en el formato deseado
+    // const hora_actual = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    const hora_actual = getFechaActual();
     const aux = { ...form, create_at: hora_actual };
     setForm(aux);
     console.log({ aux });
@@ -47,33 +53,53 @@ const FormTask = () => {
     router.push("/");
   };
 
+  const getFechaActual = () => {
+    // Obtener la fecha y hora actual
+    const now = new Date();
+
+    // Obtener los componentes de la fecha y hora
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
+    const day = String(now.getDate()).padStart(2, "0");
+
+    // Formatear en el formato deseado
+    const hora_actual = `${year}-${month}-${day}`;
+    return hora_actual;
+  };
+
   //   console.log(form);
 
   return (
-    <form className="border p-5 rounded mt-5 " onSubmit={handleSubmit}>
-      <div className="mb-5">
-        <label htmlFor="">Título:</label>
-        <input
-          className="border ml-3 rounded p-1"
-          type="text"
-          name="title"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-5">
-        <label htmlFor="">Expira el:</label>
-        <input
-          className="border ml-3 rounded p-1"
-          type="date"
-          name="expires_on"
-          onChange={handleChange}
-        />
-      </div>
+    <div>
+      <form
+        className="border p-5 rounded mt-10 md:w-4/12 md:mx-auto   "
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-5">
+          <label htmlFor="">Título:</label>
+          <input
+            className="border ml-3 rounded p-1"
+            type="text"
+            name="title"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-5">
+          <label htmlFor="">Expira el:</label>
+          <input
+            className="border ml-3 rounded p-1"
+            type="date"
+            name="expires_on"
+            value={form.expires_on}
+            onChange={handleChange}
+          />
+        </div>
 
-      <button className="border rounded p-1 bg-[#F45432] text-white px-3 py-1">
-        Crear
-      </button>
-    </form>
+        <button className="border rounded p-1 bg-[#F45432] text-white px-3 py-1">
+          Crear
+        </button>
+      </form>
+    </div>
   );
 };
 
