@@ -6,6 +6,7 @@ const TargetTask = ({ task }: any) => {
   const dispatch = useAppDispatch();
 
   const [tasksState, setTasksState] = useState(task);
+  console.log({ tasksState });
   // const [isExpirado, setIsExpirado] = useState(false);
 
   useEffect(() => {
@@ -21,8 +22,10 @@ const TargetTask = ({ task }: any) => {
 
     if (today > expires_on) {
       setTasksState({ ...tasksState, estado: "atrasada" });
+      dispatch(updateTasks(tasksState));
     } else {
       setTasksState({ ...tasksState, estado: "pendiente" });
+      dispatch(updateTasks(tasksState));
     }
     // console.log("cjeckexpired", expires_on, today);
     // if (today > expires_on) {

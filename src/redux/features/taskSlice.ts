@@ -62,6 +62,34 @@ export const deleteTasks = createAsyncThunk(
   }
 );
 
+export const liberarTasks = createAsyncThunk(
+  "tasks/liberar",
+  async (tasks: Task[], thunkAPI) => {
+    tasks.forEach(async (task) => {
+      await fetch(`https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+    });
+
+    // const res = await fetch(
+    //   `https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`,
+    //   {
+    //     method: "DELETE",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(task),
+    //   }
+    // );
+    // const data = await res.json();
+    // return data;
+  }
+);
+
 //FIN Funciones Thunks
 
 export const taskSlice = createSlice({
@@ -92,6 +120,18 @@ export const taskSlice = createSlice({
         ...state.tasks[indice],
         ...action.payload,
       };
+    });
+
+    builder.addCase(liberarTasks.fulfilled, (state, action) => {
+      state.tasks.forEach((task) => {
+        let indice = state.tasks.findIndex((task) => task.id === task.id);
+        console.log({ indice });
+
+        state.tasks[indice] = {
+          ...state.tasks[indice],
+          ...task,
+        };
+      });
     });
 
     builder.addCase(deleteTasks.fulfilled, (state, action) => {
