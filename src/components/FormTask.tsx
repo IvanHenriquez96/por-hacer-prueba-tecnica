@@ -14,6 +14,7 @@ const FormTask = () => {
     estado: "pendiente",
     create_at: "",
     expires_on: "",
+    checked: false,
   });
 
   const handleChange = (e: any) => {
@@ -25,9 +26,22 @@ const FormTask = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    let hora_actual = new Date().getTime() / 1000; // Divide by 1000 to convert milliseconds to seconds
-    const aux = { ...form, create_at: hora_actual.toString() };
+    // Obtener la fecha y hora actual
+    const now = new Date();
+
+    // Obtener los componentes de la fecha y hora
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+
+    // Formatear en el formato deseado
+    const hora_actual = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    const aux = { ...form, create_at: hora_actual };
     setForm(aux);
+    console.log({ aux });
 
     dispatch(saveTasks(form));
     router.push("/");
@@ -36,17 +50,29 @@ const FormTask = () => {
   //   console.log(form);
 
   return (
-    <form className="border p-2 rounded" onSubmit={handleSubmit}>
-      <div>
+    <form className="border p-5 rounded mt-5 " onSubmit={handleSubmit}>
+      <div className="mb-5">
         <label htmlFor="">Título:</label>
-        <input className="border" type="text" name="title" onChange={handleChange} />
+        <input
+          className="border ml-3 rounded p-1"
+          type="text"
+          name="title"
+          onChange={handleChange}
+        />
       </div>
-      <div>
+      <div className="mb-5">
         <label htmlFor="">Expira el:</label>
-        <input className="border" type="date" name="expires_on" onChange={handleChange} />
+        <input
+          className="border ml-3 rounded p-1"
+          type="date"
+          name="expires_on"
+          onChange={handleChange}
+        />
       </div>
 
-      <button className="border rounded p-1">Crear</button>
+      <button className="border rounded p-1 bg-[#F45432] text-white px-3 py-1">
+        Crear
+      </button>
     </form>
   );
 };
