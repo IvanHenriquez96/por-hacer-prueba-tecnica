@@ -6,21 +6,46 @@ const TargetTask = ({ task }: any) => {
   const dispatch = useAppDispatch();
 
   const [tasksState, setTasksState] = useState(task);
-  const [isExpirado, setIsExpirado] = useState(false);
+  // const [isExpirado, setIsExpirado] = useState(false);
 
   useEffect(() => {
     //pregunta si la tarea está expirada
+    console.log("entra a checkisexpired");
+
     checkIsExpired();
   }, []);
 
   const checkIsExpired = () => {
-    let expires_on = new Date(tasksState.expires_on);
-    let today = new Date();
-    // console.log("cjeckexpired", expires_on, today);
+    let expires_on = new Date(tasksState.expires_on).getTime() / 1000;
+    let today = new Date().getTime() / 1000;
+
     if (today > expires_on) {
-      setIsExpirado(true);
+      setTasksState({ ...tasksState, estado: "atrasada" });
+    } else {
+      setTasksState({ ...tasksState, estado: "pendiente" });
     }
+    // console.log("cjeckexpired", expires_on, today);
+    // if (today > expires_on) {
+    //   setIsExpirado(true);
+    //   setTasksState({ ...tasksState, estado: "atrasada" });
+    // } else {
+    //   setIsExpirado(false);
+    //   // setTasksState({ ...tasksState, estado: "pendiente" });
+    // }
   };
+
+  // const checkIsExpired = () => {
+  //   let expires_on = new Date(tasksState.expires_on);
+  //   let today = new Date();
+  //   // console.log("cjeckexpired", expires_on, today);
+  //   if (today > expires_on) {
+  //     setIsExpirado(true);
+  //     setTasksState({ ...tasksState, estado: "atrasada" });
+  //   } else {
+  //     setIsExpirado(false);
+  //     // setTasksState({ ...tasksState, estado: "pendiente" });
+  //   }
+  // };
 
   console.log(tasksState);
 
@@ -42,12 +67,13 @@ const TargetTask = ({ task }: any) => {
   return (
     <>
       <div
-        className={`border rounded p-2 flex my-4 ${
-          isExpirado && "bg-red-300 text-gray-50"
+        className={`animate-fade border rounded p-2 flex my-4 ${
+          task.estado == "atrasada" && "bg-red-300 text-gray-50"
         }`}
       >
         <div className="w-10/12 flex justify-between items-center">
           <input
+            // className="text-white accent-green-500"
             type="checkbox"
             name="checked"
             checked={task.checked}
@@ -55,7 +81,9 @@ const TargetTask = ({ task }: any) => {
           />
           <p className="ml-4 text-sm md:text-base">{task.title}</p>
           <input
-            className={`border w-4/12 md:w-1/12 ${isExpirado && "text-red-400"}`}
+            className={`border w-4/12 md:w-1/12 ${
+              task.estado == "atrasada" && "text-red-400"
+            }`}
             type="date"
             name="expires_on"
             value={tasksState.expires_on}
@@ -64,7 +92,7 @@ const TargetTask = ({ task }: any) => {
         </div>
 
         <div className="w-2/12 flex justify-center items-center ">
-          {isExpirado ? (
+          {task.estado == "atrasada" ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
