@@ -9,12 +9,20 @@ const TargetTask = ({ task }: any) => {
   const [isExpirado, setIsExpirado] = useState(false);
 
   useEffect(() => {
-    const expires_on_aux = new Date(tasksState.expires_on);
-    setTasksState({
-      ...tasksState,
-      expires_on: expires_on_aux.toISOString().split("T")[0],
-    });
+    //pregunta si la tarea está expirada
+    checkIsExpired();
   }, []);
+
+  const checkIsExpired = () => {
+    let expires_on = new Date(tasksState.expires_on);
+    let today = new Date();
+    // console.log("cjeckexpired", expires_on, today);
+    if (today > expires_on) {
+      setIsExpirado(true);
+    }
+  };
+
+  console.log(tasksState);
 
   const handleChange = (e: any) => {
     // console.log("cambia fecha");
@@ -47,7 +55,7 @@ const TargetTask = ({ task }: any) => {
           />
           <p className="ml-4 text-sm md:text-base">{task.title}</p>
           <input
-            className={`border ${isExpirado && "text-red-400"}`}
+            className={`border w-4/12 md:w-1/12 ${isExpirado && "text-red-400"}`}
             type="date"
             name="expires_on"
             value={tasksState.expires_on}
@@ -56,7 +64,22 @@ const TargetTask = ({ task }: any) => {
         </div>
 
         <div className="w-2/12 flex justify-center items-center ">
-          {task.completed ? (
+          {isExpirado ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          ) : task.completed ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
