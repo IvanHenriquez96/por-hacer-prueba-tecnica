@@ -1,6 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Task, TaskList } from "../../types/types";
 
+var _state: Task[] = [];
+
 const initialState: TaskList = {
   tasks: [],
 };
@@ -11,6 +13,8 @@ export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
     cache: "no-store",
   });
   const data = await res.json();
+  console.log("fetchTask", data);
+
   return data;
 });
 
@@ -105,15 +109,57 @@ export const taskSlice = createSlice({
     addTask: (state, action: PayloadAction<Task>) => {
       state.tasks = [...state.tasks, action.payload];
     },
+    filtrarTask: (state, action) => {
+      console.log("DESDE SLICE", { state }, { action }, _state);
+
+      //Primero verifica que estados quiere ver
+      let datos_filtrados_1: any = [];
+
+      if (action.payload.filtrar_estado != "") {
+        datos_filtrados_1 = _state.filter(
+          (objeto) => objeto.estado == action.payload.filtrar_estado
+        );
+      } else {
+        datos_filtrados_1 = _state;
+      }
+
+      //Segundo, los ordena por fecha de vencimiento si es que asi se seleccionó
+      let datos_filtrados_2: any = [];
+
+      if (action.payload.ordenar_por != "fecha_creacion") {
+        let arrayForSort = [...datos_filtrados_1];
+        datos_filtrados_2 = arrayForSort.sort((a: any, b: any) => {
+          let da: any = new Date(a.expires_on),
+            db: any = new Date(b.expires_on);
+          return da - db;
+        });
+      } else {
+        datos_filtrados_2 = datos_filtrados_1;
+      }
+
+      //Tercero, selecciona los que tienen el texto buscado
+      let datos_filtrados_3: any = [];
+      if (action.payload.titulo != "") {
+        datos_filtrados_3 = datos_filtrados_2.filter((task: any) => {
+          return task.title.includes(action.payload.titulo);
+        });
+      } else {
+        datos_filtrados_3 = datos_filtrados_2;
+      }
+
+      state.tasks = datos_filtrados_3;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
       console.log("redux", action.payload);
       state.tasks = action.payload;
+      _state = state.tasks;
     });
 
     builder.addCase(saveTasks.fulfilled, (state, action) => {
       state.tasks.push(action.payload);
+      // _state = state.tasks;
     });
 
     builder.addCase(updateTasks.fulfilled, (state, action) => {
@@ -124,6 +170,7 @@ export const taskSlice = createSlice({
         ...state.tasks[indice],
         ...action.payload,
       };
+      // _state = state.tasks;
     });
 
     builder.addCase(liberarTasks.fulfilled, (state, action) => {
@@ -139,6 +186,8 @@ export const taskSlice = createSlice({
           console.log("3", state.tasks[indice]);
         }
       });
+
+      // _state = state.tasks;
     });
 
     builder.addCase(deleteTasks.fulfilled, (state, action) => {
@@ -148,6 +197,6 @@ export const taskSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setInitialState, addTask } = taskSlice.actions;
+export const { setInitialState, addTask, filtrarTask } = taskSlice.actions;
 
 export default taskSlice.reducer;

@@ -1,6 +1,21 @@
 "use client";
+import { filtrarTask } from "@/redux/features/taskSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useState } from "react";
 
 const Filtro = ({ showFilter, setShowFilter, toggleFilter }: any) => {
+  const [datosFiltro, setDatosFiltro] = useState({
+    titulo: "",
+    ordenar_por: "fecha_creacion",
+    filtrar_estado: "",
+  });
+  const dispatch = useAppDispatch();
+
+  const filtrarTareas = (e: any) => {
+    setDatosFiltro({ ...datosFiltro, [e.target.name]: e.target.value });
+    dispatch(filtrarTask({ ...datosFiltro, [e.target.name]: e.target.value }));
+  };
+
   return (
     <div>
       <div
@@ -16,24 +31,37 @@ const Filtro = ({ showFilter, setShowFilter, toggleFilter }: any) => {
         <form className="grid gap-y-4">
           <div>
             <label>Título:</label>
-            <input className="border w-11/12 rounded p-1" type="text" name="" id="" />
+            <input
+              className="border w-11/12 rounded p-1"
+              type="text"
+              name="titulo"
+              onChange={filtrarTareas}
+            />
           </div>
           <div>
             <label>Ordenar por:</label>
-            <select className="border w-11/12 rounded p-1" name="">
-              <option value="">Fecha creación</option>
-              <option value="">Fecha vencimiento</option>
+            <select
+              className="border w-11/12 rounded p-1"
+              name="ordenar_por"
+              onChange={filtrarTareas}
+            >
+              <option value="fecha_creacion">Fecha creación</option>
+              <option value="fecha_vencimiento">Fecha vencimiento</option>
             </select>
             {/* <input className="" type="text" name="" id="" /> */}
           </div>
 
           <div>
             <label>Estado:</label>
-            <select className="border w-11/12 rounded p-1" name="">
+            <select
+              className="border w-11/12 rounded p-1"
+              name="filtrar_estado"
+              onChange={filtrarTareas}
+            >
               <option value="">Todos</option>
-              <option value="">Liberada</option>
-              <option value="">Pendiente</option>
-              <option value="">Atrasadas</option>
+              <option value="liberada">Liberada</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="atrasada">Atrasadas</option>
             </select>
             {/* <input className="" type="text" name="" id="" /> */}
           </div>

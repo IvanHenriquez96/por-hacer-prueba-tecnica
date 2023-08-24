@@ -73,7 +73,7 @@ const FormTask = () => {
         <div className="mb-5">
           <label htmlFor="">Título:</label>
           <input
-            className="border ml-3 rounded p-1"
+            className="border mx-auto rounded p-1 w-full "
             type="text"
             name="title"
             onChange={handleChange}
