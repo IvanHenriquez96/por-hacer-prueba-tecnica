@@ -66,13 +66,16 @@ export const liberarTasks = createAsyncThunk(
   "tasks/liberar",
   async (tasks: Task[], thunkAPI) => {
     tasks.forEach(async (task) => {
-      await fetch(`https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
+      if (task.checked) {
+        console.log("se tiene q liberar", task);
+        await fetch(`https://json-server-prueba-tecnica.onrender.com/tasks/${task.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...task, estado: "liberada", checked: false }),
+        });
+      }
     });
 
     // const res = await fetch(
@@ -124,14 +127,17 @@ export const taskSlice = createSlice({
     });
 
     builder.addCase(liberarTasks.fulfilled, (state, action) => {
-      state.tasks.forEach((task) => {
-        let indice = state.tasks.findIndex((task) => task.id === task.id);
-        console.log({ indice });
+      console.log("se librea en la API, ahora la vista");
+      state.tasks.forEach((task, indice) => {
+        if (task.checked) {
+          state.tasks[indice] = {
+            ...state.tasks[indice],
+            estado: "liberada",
 
-        state.tasks[indice] = {
-          ...state.tasks[indice],
-          ...task,
-        };
+            checked: false,
+          };
+          console.log("3", state.tasks[indice]);
+        }
       });
     });
 

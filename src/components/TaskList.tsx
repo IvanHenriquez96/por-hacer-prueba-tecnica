@@ -1,5 +1,10 @@
 "use client";
-import { setInitialState, addTask, fetchTasks } from "@/redux/features/taskSlice";
+import {
+  setInitialState,
+  addTask,
+  fetchTasks,
+  liberarTasks,
+} from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect, useState } from "react";
 import TargetTask from "./TargetTask";
@@ -19,19 +24,30 @@ const TaskList = () => {
   useEffect(() => {
     console.log("se imprime la lista");
     //se setean como initialState todas las tareas
-    dispatch(fetchTasks());
+    obtenerDatos();
     // console.log(tasksState);
   }, []);
 
+  const obtenerDatos = async () => {
+    await dispatch(fetchTasks());
+  };
+
   const toggleFilter = () => {
     setShowFilter(!showFilter);
+  };
+
+  const liberarSeleccionadas = async () => {
+    console.log("liberar tareas selecionadas");
+    await dispatch(liberarTasks(tasksState));
   };
 
   return (
     <div className="border rounded p-2">
       <div className="flex justify-between">
         <div className="flex border-green-700  bg-green-500 p-2 rounded text-white">
-          <button className="">Liberar Seleccionadas</button>
+          <button className="" onClick={liberarSeleccionadas}>
+            Liberar Seleccionadas
+          </button>
         </div>
 
         {showFilter ? (

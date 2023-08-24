@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 const FormTask = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const today = new Date().toISOString().split("T")[0]; // Obtener la fecha de hoy en el formato YYYY-MM-DD
 
   const [form, setForm] = useState({
     title: "",
@@ -17,12 +18,15 @@ const FormTask = () => {
     checked: false,
   });
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     const fecha = getFechaActual();
     setForm({ ...form, create_at: fecha, expires_on: fecha });
   }, []);
 
   const handleChange = (e: any) => {
+    setError(false);
     const name = e.target.name;
     const value = e.target.value;
     const aux = { ...form, [name]: value };
@@ -31,19 +35,12 @@ const FormTask = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // // Obtener la fecha y hora actual
-    // const now = new Date();
 
-    // // Obtener los componentes de la fecha y hora
-    // const year = now.getFullYear();
-    // const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
-    // const day = String(now.getDate()).padStart(2, "0");
-    // const hours = String(now.getHours()).padStart(2, "0");
-    // const minutes = String(now.getMinutes()).padStart(2, "0");
-    // const seconds = String(now.getSeconds()).padStart(2, "0");
+    if (form.title.trim() == "") {
+      setError(true);
+      return;
+    }
 
-    // // Formatear en el formato deseado
-    // const hora_actual = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     const hora_actual = getFechaActual();
     const aux = { ...form, create_at: hora_actual };
     setForm(aux);
@@ -67,8 +64,6 @@ const FormTask = () => {
     return hora_actual;
   };
 
-  //   console.log(form);
-
   return (
     <div>
       <form
@@ -91,11 +86,18 @@ const FormTask = () => {
             type="date"
             name="expires_on"
             value={form.expires_on}
+            min={today}
             onChange={handleChange}
           />
         </div>
 
-        <button className="border rounded p-1 bg-[#F45432] text-white px-3 py-1">
+        {error && (
+          <div className="border rounded p-2 mb-5 bg-red-400 text-gray-50">
+            <p>Atención! el campo título no puede estar vacío!</p>
+          </div>
+        )}
+
+        <button className="border rounded p-1 bg-[#F45432] text-white px-3 py-1 w-full">
           Crear
         </button>
       </form>

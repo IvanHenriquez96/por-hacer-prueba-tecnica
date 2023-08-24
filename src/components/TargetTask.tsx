@@ -7,6 +7,25 @@ const TargetTask = ({ task }: any) => {
 
   const [tasksState, setTasksState] = useState(task);
 
+  useEffect(() => {
+    if (task.estado != "liberada") {
+      let today = Math.round(new Date().getTime() / 1000) - 14400;
+      let expira_el = Math.round(new Date(task.expires_on).getTime() / 1000);
+
+      if (today > expira_el) {
+        dispatch(
+          updateTasks({ ...task, estado: "atrasada", expires_on: task.expires_on })
+        );
+        setTasksState({ ...tasksState, estado: "atrasada", expires_on: task.expires_on });
+      } else {
+        dispatch(
+          updateTasks({ ...task, estado: "pendiente", expires_on: task.expires_on })
+        );
+        setTasksState({ ...tasksState, estado: "atrasada", expires_on: task.expires_on });
+      }
+    }
+  }, []);
+
   const cambiaFechaYEstado = (fecha_expiracion: any) => {
     let today = Math.round(new Date().getTime() / 1000) - 14400;
     let expira_el = Math.round(new Date(fecha_expiracion).getTime() / 1000);
@@ -32,9 +51,6 @@ const TargetTask = ({ task }: any) => {
     } else {
       console.log("modifica fecha");
       cambiaFechaYEstado(e.target.value);
-
-      // setTasksState({ ...tasksState, [e.target.name]: e.target.value });
-      // dispatch(updateTasks({ ...tasksState, [e.target.name]: e.target.value }));
     }
   };
 
@@ -43,21 +59,25 @@ const TargetTask = ({ task }: any) => {
       <div
         className={`animate-fade border rounded p-2 flex my-4 ${
           task.estado == "atrasada" && "bg-red-300 text-gray-50"
-        }`}
+        } ${task.estado == "liberada" && "bg-green-400 text-gray-50"}`}
       >
         <div className="w-10/12 flex justify-between items-center">
-          <input
-            // className="text-white accent-green-500"
-            type="checkbox"
-            name="checked"
-            checked={task.checked}
-            onChange={handleChange}
-          />
+          {task.estado != "liberada" ? (
+            <input
+              // className="text-white accent-green-500"
+              type="checkbox"
+              name="checked"
+              checked={task.checked}
+              onChange={handleChange}
+            />
+          ) : (
+            <div></div>
+          )}
           <p className="ml-4 text-sm md:text-base">{task.title}</p>
           <input
             className={`border w-4/12 md:w-1/12 ${
               task.estado == "atrasada" && "text-red-400"
-            }`}
+            } ${task.estado == "liberada" && "text-green-400"} `}
             type="date"
             name="expires_on"
             value={tasksState.expires_on}
@@ -67,7 +87,7 @@ const TargetTask = ({ task }: any) => {
 
         <div className="w-2/12 flex justify-center items-center ">
           {/* ICONOO ATRASADA */}
-          {tasksState.estado == "atrasada" && (
+          {task.estado == "atrasada" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -84,7 +104,7 @@ const TargetTask = ({ task }: any) => {
             </svg>
           )}
           {/* ICONOO PENDIENT */}
-          {tasksState.estado == "pendiente" && (
+          {task.estado == "pendiente" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -101,7 +121,7 @@ const TargetTask = ({ task }: any) => {
             </svg>
           )}
           {/* ICONOO LIBERADA */}
-          {tasksState.estado == "liberada" && (
+          {task.estado == "liberada" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
