@@ -105,6 +105,7 @@ export const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
+      console.log("redux", action.payload);
       state.tasks = action.payload;
     });
 
