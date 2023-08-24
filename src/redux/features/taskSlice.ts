@@ -118,7 +118,7 @@ export const taskSlice = createSlice({
 
     builder.addCase(updateTasks.fulfilled, (state, action) => {
       let indice = state.tasks.findIndex((task) => task.id === action.payload.id);
-      console.log({ indice });
+      console.log({ indice }, state.tasks);
 
       state.tasks[indice] = {
         ...state.tasks[indice],

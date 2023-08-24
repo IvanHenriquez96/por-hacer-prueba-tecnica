@@ -46,8 +46,8 @@ const TargetTask = ({ task }: any) => {
   const handleChange = (e: any) => {
     if (e.target.name == "checked") {
       console.log("modifica checked");
-      setTasksState({ ...tasksState, [e.target.name]: e.target.checked });
-      dispatch(updateTasks({ ...tasksState, [e.target.name]: e.target.checked }));
+      setTasksState({ ...task, [e.target.name]: e.target.checked });
+      dispatch(updateTasks({ ...task, [e.target.name]: e.target.checked }));
     } else {
       console.log("modifica fecha");
       cambiaFechaYEstado(e.target.value);
