@@ -36,6 +36,15 @@ const TargetTask = ({ task }: any) => {
     let expira_el = new Date(fecha_expiracion);
 
     if (today > expira_el) {
+      console.log("la fecha es superior a hoy");
+      dispatch(
+        updateTasks({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
+      );
+      dispatch(
+        updateTask({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
+      ); //cambia en el estado global
+      setTasksState({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion });
+    } else {
       console.log("la fecha es inferior a hoy");
 
       dispatch(
@@ -45,15 +54,6 @@ const TargetTask = ({ task }: any) => {
         updateTask({ ...tasksState, estado: "pendiente", expires_on: fecha_expiracion })
       ); //cambia en el estado global
       setTasksState({ ...tasksState, estado: "pendiente", expires_on: fecha_expiracion });
-    } else {
-      console.log("la fecha es superior a hoy");
-      dispatch(
-        updateTasks({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
-      );
-      dispatch(
-        updateTask({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
-      ); //cambia en el estado global
-      setTasksState({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion });
     }
   };
 
