@@ -106,6 +106,7 @@ export const taskSlice = createSlice({
     setInitialState: (state, action) => {
       console.log("set initial state", action.payload);
       state.tasks = action.payload;
+      _state = action.payload;
     },
     addTask: (state, action: PayloadAction<Task>) => {
       state.tasks = [...state.tasks, action.payload];
