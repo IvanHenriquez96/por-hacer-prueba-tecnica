@@ -8,15 +8,15 @@ const initialState: TaskList = {
 };
 
 //Funciones Thunks
-export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
-  const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
-    cache: "no-store",
-  });
-  const data = await res.json();
-  console.log("fetchTask", data);
+// export const fetchTasks = createAsyncThunk("tasks/fetch", async (thunkAPI) => {
+//   const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
+//     cache: "no-store",
+//   });
+//   const data = await res.json();
+//   console.log("fetchTask", data);
 
-  return data;
-});
+//   return data;
+// });
 
 export const saveTasks = createAsyncThunk("tasks/save", async (task: Task, thunkAPI) => {
   const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
@@ -104,10 +104,19 @@ export const taskSlice = createSlice({
   initialState,
   reducers: {
     setInitialState: (state, action) => {
+      console.log("set initial state", action.payload);
       state.tasks = action.payload;
     },
     addTask: (state, action: PayloadAction<Task>) => {
       state.tasks = [...state.tasks, action.payload];
+    },
+    updateTask: (state, action: PayloadAction<Task>) => {
+      const indice = state.tasks.findIndex((obj) => obj.id == action.payload.id);
+      // state.tasks = [...state.tasks, action.payload];
+      state.tasks[indice] = {
+        ...state.tasks[indice],
+        ...action.payload,
+      };
     },
     filtrarTask: (state, action) => {
       console.log("DESDE SLICE", { state }, { action }, _state);
@@ -151,11 +160,11 @@ export const taskSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchTasks.fulfilled, (state, action) => {
-      console.log("redux", action.payload);
-      state.tasks = action.payload;
-      _state = state.tasks;
-    });
+    // builder.addCase(fetchTasks.fulfilled, (state, action) => {
+    //   console.log("redux", action.payload);
+    //   state.tasks = action.payload;
+    //   _state = state.tasks;
+    // });
 
     builder.addCase(saveTasks.fulfilled, (state, action) => {
       state.tasks.push(action.payload);
@@ -163,14 +172,12 @@ export const taskSlice = createSlice({
     });
 
     builder.addCase(updateTasks.fulfilled, (state, action) => {
-      let indice = state.tasks.findIndex((task) => task.id === action.payload.id);
-      console.log({ indice }, state.tasks);
-
-      state.tasks[indice] = {
-        ...state.tasks[indice],
-        ...action.payload,
-      };
-      // _state = state.tasks;
+      // let indice = state.tasks.findIndex((task) => task.id === action.payload.id);
+      // console.log({ indice }, state.tasks);
+      // state.tasks[indice] = {
+      //   ...state.tasks[indice],
+      //   ...action.payload,
+      // };
     });
 
     builder.addCase(liberarTasks.fulfilled, (state, action) => {
@@ -197,6 +204,6 @@ export const taskSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setInitialState, addTask, filtrarTask } = taskSlice.actions;
+export const { setInitialState, addTask, filtrarTask, updateTask } = taskSlice.actions;
 
 export default taskSlice.reducer;

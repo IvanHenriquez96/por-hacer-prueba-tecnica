@@ -6,10 +6,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const FormTask = () => {
+  // States
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const today = new Date().toISOString().split("T")[0]; // Obtener la fecha de hoy en el formato YYYY-MM-DD
-
+  const [error, setError] = useState(false);
   const [form, setForm] = useState({
     title: "",
     estado: "pendiente",
@@ -18,7 +18,8 @@ const FormTask = () => {
     checked: false,
   });
 
-  const [error, setError] = useState(false);
+  // Functions
+  const today = new Date().toISOString().split("T")[0]; // Obtener la fecha de hoy en el formato YYYY-MM-DD
 
   useEffect(() => {
     const fecha = getFechaActual();
@@ -51,15 +52,10 @@ const FormTask = () => {
   };
 
   const getFechaActual = () => {
-    // Obtener la fecha y hora actual
     const now = new Date();
-
-    // Obtener los componentes de la fecha y hora
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0"); // Los meses van de 0 a 11
     const day = String(now.getDate()).padStart(2, "0");
-
-    // Formatear en el formato deseado
     const hora_actual = `${year}-${month}-${day}`;
     return hora_actual;
   };
@@ -82,7 +78,7 @@ const FormTask = () => {
         <div className="mb-5">
           <label htmlFor="">Expira el:</label>
           <input
-            className="border ml-3 rounded p-1"
+            className="border  rounded p-1"
             type="date"
             name="expires_on"
             value={form.expires_on}

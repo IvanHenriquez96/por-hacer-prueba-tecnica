@@ -2,7 +2,7 @@
 import {
   setInitialState,
   addTask,
-  fetchTasks,
+  // fetchTasks,
   liberarTasks,
 } from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -10,26 +10,26 @@ import { useEffect, useState } from "react";
 import TargetTask from "./TargetTask";
 import Link from "next/link";
 import Filtro from "./Filtro";
-// import { TaskList } from "@/types/types";
-
-// interface Props {
-//   tasks: any;
-// }
+import IconoFiltro from "./icons/IconoFiltro";
 
 const TaskList = () => {
   const dispatch = useAppDispatch();
   const tasksState = useAppSelector((state) => state.taskReducer.tasks);
   const [showFilter, setShowFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("se imprime la lista");
-    //se setean como initialState todas las tareas
     obtenerDatos();
-    // console.log(tasksState);
   }, []);
 
   const obtenerDatos = async () => {
-    await dispatch(fetchTasks());
+    const res = await fetch("https://json-server-prueba-tecnica.onrender.com/tasks", {
+      cache: "no-cache",
+    });
+    const data = await res.json();
+    console.log("datos recibidos", data);
+    dispatch(setInitialState(data));
+    setIsLoading(false);
   };
 
   const toggleFilter = () => {
@@ -37,7 +37,6 @@ const TaskList = () => {
   };
 
   const liberarSeleccionadas = async () => {
-    console.log("liberar tareas selecionadas");
     await dispatch(liberarTasks(tasksState));
   };
 
@@ -50,6 +49,7 @@ const TaskList = () => {
           </button>
         </div>
 
+        {/* Seccion Filtro */}
         {showFilter ? (
           <Filtro
             showFilter={showFilter}
@@ -57,33 +57,30 @@ const TaskList = () => {
             setShowFilter={setShowFilter}
           />
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-            onClick={toggleFilter}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-            />
-          </svg>
+          <div className="cursor-pointer" onClick={toggleFilter}>
+            <IconoFiltro />
+          </div>
         )}
       </div>
 
-      {tasksState.map((task: any, index) => {
-        return <TargetTask key={index} task={task} />;
-      })}
+      {/* Lista de Tareas */}
 
-      <Link href={"/createTask"}>
-        <div className="my-5 border rounded p-2 text-center text-3xl font-extrabold">
-          +
+      {isLoading ? (
+        <div className="my-5 text-center font-semibold animate-pulse">Cargando...</div>
+      ) : (
+        <div>
+          {tasksState.map((task: any, index) => {
+            return <TargetTask key={index} task={task} />;
+          })}
+
+          {/* Agregar Nueva Tarea */}
+          <Link href={"/createTask"}>
+            <div className="my-5 border rounded p-2 text-center text-3xl font-extrabold">
+              +
+            </div>
+          </Link>
         </div>
-      </Link>
+      )}
     </div>
   );
 };

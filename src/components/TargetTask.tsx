@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { updateTasks } from "@/redux/features/taskSlice";
+import { updateTasks, updateTask } from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const TargetTask = ({ task }: any) => {
@@ -47,7 +47,8 @@ const TargetTask = ({ task }: any) => {
     if (e.target.name == "checked") {
       console.log("modifica checked");
       setTasksState({ ...task, [e.target.name]: e.target.checked });
-      dispatch(updateTasks({ ...task, [e.target.name]: e.target.checked }));
+      dispatch(updateTask({ ...task, [e.target.name]: e.target.checked })); //cambia en el estado global
+      dispatch(updateTasks({ ...task, [e.target.name]: e.target.checked })); //cambia en bdd async
     } else {
       console.log("modifica fecha");
       cambiaFechaYEstado(e.target.value);
