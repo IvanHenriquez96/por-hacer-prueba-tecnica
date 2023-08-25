@@ -3,9 +3,14 @@ import { updateTasks, updateTask } from "@/redux/features/taskSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const TargetTask = ({ task }: any) => {
+  // const tasksStateGlobal = useAppSelector((state) => state.taskReducer.tasks);
+  // console.log({ tasksStateGlobal });
+
   const dispatch = useAppDispatch();
 
   const [tasksState, setTasksState] = useState(task);
+
+  console.log({ tasksState });
 
   useEffect(() => {
     console.log("entra al useEffect");
@@ -27,26 +32,27 @@ const TargetTask = ({ task }: any) => {
   }, []);
 
   const cambiaFechaYEstado = (fecha_expiracion: any) => {
-    let today = Math.round(new Date().getTime() / 1000) - 14400;
-    let expira_el = Math.round(new Date(fecha_expiracion).getTime() / 1000);
+    let today = new Date();
+    let expira_el = new Date(fecha_expiracion);
 
     if (today > expira_el) {
-      dispatch(
-        updateTasks({ ...task, estado: "atrasada", expires_on: fecha_expiracion })
-      );
-      dispatch(
-        updateTask({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
-      ); //cambia en el estado global
+      console.log("la fecha es inferior a hoy");
 
-      setTasksState({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion });
-    } else {
       dispatch(
-        updateTasks({ ...task, estado: "pendiente", expires_on: fecha_expiracion })
+        updateTasks({ ...tasksState, estado: "pendiente", expires_on: fecha_expiracion })
       );
       dispatch(
         updateTask({ ...tasksState, estado: "pendiente", expires_on: fecha_expiracion })
       ); //cambia en el estado global
-
+      setTasksState({ ...tasksState, estado: "pendiente", expires_on: fecha_expiracion });
+    } else {
+      console.log("la fecha es superior a hoy");
+      dispatch(
+        updateTasks({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
+      );
+      dispatch(
+        updateTask({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion })
+      ); //cambia en el estado global
       setTasksState({ ...tasksState, estado: "atrasada", expires_on: fecha_expiracion });
     }
   };
@@ -58,6 +64,8 @@ const TargetTask = ({ task }: any) => {
       dispatch(updateTask({ ...task, [e.target.name]: e.target.checked })); //cambia en el estado global
       dispatch(updateTasks({ ...task, [e.target.name]: e.target.checked })); //cambia en bdd async
     } else {
+      setTasksState({ ...task, expires_on: e.target.value });
+
       console.log("modifica fecha");
       cambiaFechaYEstado(e.target.value);
     }
